@@ -69,10 +69,7 @@ bool OpVaultReader::decryptBandEntry(const QJsonObject& bandEntry,
     const QByteArray& realHmacSig =
         CryptoHash::hmac(kBA.mid(0, kBA.size() - hmacSig.size()), m_masterHmacKey, CryptoHash::Sha256);
     if (realHmacSig != hmacSig) {
-        qCritical() << QString(R"(Entry "k" failed its HMAC in UUID "%1", wanted "%2" got "%3")")
-                           .arg(uuid)
-                           .arg(QString::fromUtf8(hmacSig.toHex()))
-                           .arg(QString::fromUtf8(realHmacSig));
+        qCritical() << QString(R"(Entry "k" failed its HMAC in UUID "%1")").arg(uuid);
         return false;
     }
 
@@ -140,8 +137,7 @@ Entry* OpVaultReader::processBandEntry(const QJsonObject& bandEntry, const QDir&
             entry->setGroup(rootGroup);
         }
     } else {
-        qWarning() << "Using the root group because the entry is category-less: <<\n"
-                   << bandEntry << "\n>> in UUID " << uuid;
+        qWarning() << "Using the root group because the entry is category-less, UUID" << uuid;
         entry->setGroup(rootGroup);
     }
 
@@ -203,8 +199,7 @@ Entry* OpVaultReader::processBandEntry(const QJsonObject& bandEntry, const QDir&
     const QJsonArray& sectionsArray = data["sections"].toArray();
     for (const QJsonValue& sectionValue : sectionsArray) {
         if (!sectionValue.isObject()) {
-            qWarning() << R"(Skipping non-Object in "sections" for UUID ")" << uuid << "\" << " << sectionsArray
-                       << ">>";
+            qWarning() << R"(Skipping non-Object in "sections" for UUID ")" << uuid << '"';
             continue;
         }
         const QJsonObject& section = sectionValue.toObject();

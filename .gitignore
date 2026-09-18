@@ -32,3 +32,8 @@ out/
 # vcpkg
 vcpkg_installed*/
 
+# Local credentials and password databases (existing tracked test fixtures are unaffected)
+.env
+.env.*
+*.kdbx
+*.keyx

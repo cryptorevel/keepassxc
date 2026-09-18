@@ -300,7 +300,7 @@ QJsonObject OpVaultReader::readAndAssertJsonFile(QFile& file, const QString& str
     QJsonParseError* error = Q_NULLPTR;
     QJsonDocument jDoc = QJsonDocument::fromJson(filePayload, error);
     if (!jDoc.isObject()) {
-        qCritical() << "Expected " << filePayload << "to be a JSON Object";
+        qCritical() << "Expected JSON payload to be an object";
         return {};
     }
     return jDoc.object();

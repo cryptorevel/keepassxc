@@ -53,7 +53,7 @@ void OpVaultReader::fillFromSection(Entry* entry, const QJsonObject& section)
     if (!section.contains("fields")) {
         auto sectionName = section["name"].toString();
         if (!(sectionName.toLower() == "linked items" && sectionTitle.toLower() == "related items")) {
-            qWarning() << R"(Skipping "fields"-less Section in UUID ")" << uuid << "\": <<" << section << ">>";
+            qWarning() << R"(Skipping "fields"-less Section in UUID ")" << uuid << '"';
         }
         return;
     } else if (!section["fields"].isArray()) {
@@ -64,7 +64,7 @@ void OpVaultReader::fillFromSection(Entry* entry, const QJsonObject& section)
     QJsonArray sectionFields = section["fields"].toArray();
     for (const QJsonValue sectionField : sectionFields) {
         if (!sectionField.isObject()) {
-            qWarning() << R"(Skipping non-Object "fields" in UUID ")" << uuid << "\": << " << sectionField << ">>";
+            qWarning() << R"(Skipping non-Object "fields" in UUID ")" << uuid << '"';
             continue;
         }
         fillFromSectionField(entry, sectionTitle, sectionField.toObject());
@@ -115,7 +115,7 @@ void OpVaultReader::fillFromSectionField(Entry* entry, const QString& sectionNam
             entry->setExpiryTime(expiry);
             entry->setExpires(true);
         } else {
-            qWarning() << QString("[%1] Invalid expiration date found: %2").arg(entry->title(), attrValue);
+            qWarning() << QString("Invalid expiration date found in entry UUID %1").arg(entry->uuid().toString());
         }
     } else {
         if (kind == "date" || kind == "monthYear") {
@@ -123,8 +123,7 @@ void OpVaultReader::fillFromSectionField(Entry* entry, const QString& sectionNam
             if (date.isValid()) {
                 entry->attributes()->set(attrName, QLocale::system().toString(date, QLocale::ShortFormat));
             } else {
-                qWarning()
-                    << QString("[%1] Invalid date attribute found: %2 = %3").arg(entry->title(), attrName, attrValue);
+                qWarning() << QString("Invalid date attribute found in entry UUID %1").arg(entry->uuid().toString());
             }
         } else if (kind == "address") {
             // Expand address into multiple attributes

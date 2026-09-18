@@ -196,7 +196,7 @@ void OpVaultReader::fillAttachment(Entry* entry,
                 attachMetadata[insertAs] = value;
             }
         } else {
-            qWarning() << "Expected JSON Object in \"overview\" but nope: " << overDoc;
+            qWarning() << "Expected JSON Object in attachment overview";
         }
     } else {
         qCritical()
